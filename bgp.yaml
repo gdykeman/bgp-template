@@ -1,0 +1,18 @@
+---
+- name: CONFIGURE BGP
+  hosts: all
+  connection: network_cli
+  gather_facts: no
+
+  tasks:
+    - name: PUSH BGP CONFIGURATION TO REMOTE DEVICE
+      template:
+        src: bgp_template.j2
+        dest: /etc/quagga/Quagga.conf
+      notify: RELOAD QUAGGA
+
+  handlers:
+    - name: RELOAD QUAGGA
+      service:
+        name: quagga
+        state: restarted
